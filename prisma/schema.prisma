@@ -1,0 +1,31 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Student {
+  id          String       @id @default(cuid())
+  firstName   String
+  lastName    String
+  phoneNumber String       @unique
+  classroomID String
+  classroom   Classroom    @relation(fields: [classroomID], references: [id])
+  note        String?
+  attendances Attendance[]
+}
+
+model Classroom {
+  id       String    @id @default(cuid())
+  name     String
+  students Student[]
+  image    String?
+}
+
+model Attendance {
+  date     DateTime  @id
+  students Student[]
+}
